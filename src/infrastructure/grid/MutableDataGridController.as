@@ -46,7 +46,7 @@ public class MutableDataGridController {
         } else {
             createColumns(arg);
             m_g.dataProvider = arg.rowsToXML;
-            m_d = arg;
+            m_d = arg.clone();
         }
     }
 

@@ -29,13 +29,17 @@
         private var m_c:MutableDataGridController;
 
         protected function complete(e:Event):void {
-            m_c = new MutableDataGridController();
-            m_c.setInstance(m_g);
+            if (!m_c) {
+                m_c = new MutableDataGridController();
+                m_c.setInstance(m_g);
+            }
         }
 
         public function init():void {
-            m_c = new MutableDataGridController();
-            m_c.setInstance(m_g);
+            if (!m_c) {
+                m_c = new MutableDataGridController();
+                m_c.setInstance(m_g);
+            }
         }
 
         public function get controller():MutableDataGridController {

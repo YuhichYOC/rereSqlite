@@ -33,10 +33,11 @@ public class TabPagerController {
         m_idx = 0;
     }
 
-    private var m_pages:Vector.<TabItem>;
     private var m_bar:HGroup;
     private var m_view:Group;
     private var m_idx:int;
+
+    private var m_pages:Vector.<TabItem>;
 
     public function setInstance(b:HGroup, v:Group):void {
         m_bar = b;

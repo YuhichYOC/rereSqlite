@@ -41,9 +41,9 @@ public class QueryChunk {
     private var m_a:Accessor;
     private var m_tables:TableListData;
     private var m_qList:Vector.<String>;
+    private var m_count:int;
 
     private var m_filePath:String;
-    private var m_count:int;
 
     public function set filePath(value:String):void {
         m_filePath = value;

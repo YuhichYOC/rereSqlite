@@ -105,6 +105,23 @@ public class MutableData {
         m_row = new MutableRow();
     }
 
+    public function clone():MutableData {
+        var ret:MutableData = new MutableData();
+        if (isEmpty) {
+            return ret;
+        }
+        for each (var f:String in m_fieldNames) {
+            ret.addField(f);
+        }
+        for (var r:int = 0; r < m_rows.length; ++r) {
+            for each (var item:String in m_rows[r].items) {
+                ret.addValue(item);
+            }
+            ret.addRow();
+        }
+        return ret;
+    }
+
     public function toString():String {
         var ret:String = "";
         for (var i:int = 0; i < m_fieldNames.length; ++i) {

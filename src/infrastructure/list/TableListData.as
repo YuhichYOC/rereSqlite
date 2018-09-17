@@ -23,7 +23,24 @@ package infrastructure.list {
 import mx.collections.XMLListCollection;
 
 public class TableListData {
+    public function TableListData() {
+    }
+
     private var m_rows:Vector.<Row>;
+
+    public function get rows():Vector.<Row> {
+        return m_rows;
+    }
+
+    public function get rowsToXML():XMLListCollection {
+        var x:XML = new XML(rootNode());
+        for (var i:int = 0; i < m_rows.length; ++i) {
+            var addRow:XML = rowNode(i);
+            x.appendChild(addRow);
+        }
+        var ret:XMLListCollection = new XMLListCollection(x.row);
+        return ret;
+    }
 
     public function addRow(name:String, idx:int):void {
         if (!m_rows) {
@@ -35,13 +52,6 @@ public class TableListData {
         m_rows.push(add);
     }
 
-    public function TableListData() {
-    }
-
-    public function get rows():Vector.<Row> {
-        return m_rows;
-    }
-
     public function nameToIndex(arg:String):int {
         for each (var r:Row in m_rows) {
             if (arg == r.name) {
@@ -49,16 +59,6 @@ public class TableListData {
             }
         }
         return -1;
-    }
-
-    public function get rowsToXML():XMLListCollection {
-        var x:XML = new XML(rootNode());
-        for (var i:int = 0; i < m_rows.length; ++i) {
-            var addRow:XML = rowNode(i);
-            x.appendChild(addRow);
-        }
-        var ret:XMLListCollection = new XMLListCollection(x.row);
-        return ret;
     }
 
     private function rootNode():XML {

@@ -34,6 +34,16 @@
 
         public function init(arg:AppBehind):void {
             m_ab = arg;
+            l_p.setStyle("fontFamily", m_ab.font);
+            m_p.setStyle("fontFamily", m_ab.font);
+            m_b.setStyle("fontFamily", m_ab.font);
+            l_f.setStyle("fontFamily", m_ab.font);
+            m_f.setStyle("fontFamily", m_ab.font);
+            l_p.setStyle("fontSize", m_ab.fontSize);
+            m_p.setStyle("fontSize", m_ab.fontSize);
+            m_b.setStyle("fontSize", m_ab.fontSize);
+            l_f.setStyle("fontSize", m_ab.fontSize);
+            m_f.setStyle("fontSize", m_ab.fontSize);
         }
 
         protected function browse(e:Event):void {
@@ -47,34 +57,33 @@
         }
 
         private function show():void {
-            m_f.text = m_ab.filePath;
+            if (m_ab.filePath) {
+                m_f.text = m_ab.filePath;
+            }
         }
         ]]>
     </fx:Script>
     <s:Label
+            id="l_p"
             text="パスワード"
-            fontFamily="MS Gothic"
     />
     <s:TextInput
             id="m_p"
             width="200"
-            fontFamily="MS Gothic"
     />
     <s:Button
             id="m_b"
             width="200"
             label="ファイル選択"
-            fontFamily="MS Gothic"
             click="browse(event)"
     />
     <s:Label
+            id="l_f"
             text="選択中のファイル"
-            fontFamily="MS Gothic"
     />
     <s:Label
             id="m_f"
             width="100%"
-            fontFamily="MS Gothic"
             lineBreak="toFit"
     />
 </s:VGroup>

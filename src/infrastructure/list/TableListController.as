@@ -23,20 +23,21 @@ package infrastructure.list {
 import spark.components.List;
 
 public class TableListController {
+    public function TableListController() {
+        m_doubleClickedDelegate = blankFunction;
+    }
+
     private var m_l:List;
     private var m_d:TableListData;
-    private var m_doubleClickedDelegate:Function;
 
-    public function setInstance(arg:List):void {
-        m_l = arg;
-    }
+    private var m_doubleClickedDelegate:Function;
 
     public function set doubleClickedDelegate(arg:Function):void {
         m_doubleClickedDelegate = arg;
     }
 
-    public function TableListController() {
-        m_doubleClickedDelegate = blankFunction;
+    public function setInstance(arg:List):void {
+        m_l = arg;
     }
 
     public function fill(arg:TableListData):void {

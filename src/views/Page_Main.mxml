@@ -40,6 +40,16 @@
             m_g.init(m_ab);
             m_m.init(m_ab);
             m_i.init(m_ab);
+            showView1.setStyle("fontFamily", m_ab.font);
+            showView2.setStyle("fontFamily", m_ab.font);
+            showView3.setStyle("fontFamily", m_ab.font);
+            showView4.setStyle("fontFamily", m_ab.font);
+            showView5.setStyle("fontFamily", m_ab.font);
+            showView1.setStyle("fontSize", m_ab.fontSize);
+            showView2.setStyle("fontSize", m_ab.fontSize);
+            showView3.setStyle("fontSize", m_ab.fontSize);
+            showView4.setStyle("fontSize", m_ab.fontSize);
+            showView5.setStyle("fontSize", m_ab.fontSize);
         }
 
         public function set showStatusDelegate(arg:Function):void {
@@ -98,31 +108,26 @@
                 <s:Button
                         id="showView1"
                         label="ファイル選択"
-                        fontFamily="MS Gothic"
                         click="show1(event)"
                 />
                 <s:Button
                         id="showView2"
                         label="テーブル一覧"
-                        fontFamily="MS Gothic"
                         click="show2(event)"
                 />
                 <s:Button
                         id="showView3"
                         label="クエリ"
-                        fontFamily="MS Gothic"
                         click="show3(event)"
                 />
                 <s:Button
                         id="showView4"
                         label="問い合わせ結果"
-                        fontFamily="MS Gothic"
                         click="show4(event)"
                 />
                 <s:Button
                         id="showView5"
                         label="メッセージ"
-                        fontFamily="MS Gothic"
                         click="show5(event)"
                 />
             </s:HGroup>

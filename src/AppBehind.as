@@ -20,15 +20,46 @@
 */
 
 package {
+import flash.events.EventDispatcher;
+import flash.filesystem.File;
+import flash.filesystem.FileMode;
+import flash.filesystem.FileStream;
+
 import infrastructure.QueryChunk;
 
-public class AppBehind {
+public class AppBehind extends EventDispatcher {
+    public function AppBehind() {
+        m_font = "";
+        var s:FileStream = new FileStream();
+        s.open(File.applicationDirectory.resolvePath("config.xml"), FileMode.READ);
+        try {
+            var x:XML = new XML(s.readUTFBytes(s.bytesAvailable));
+            m_font = x.font.child("*");
+            m_fontSize = parseInt(x.fontSize.child("*"));
+        } finally {
+            s.close();
+        }
+        m_filePath = "";
+        m_password = "";
+        m_message = "";
+        m_queryChunk = new QueryChunk();
+        m_filePathDelegate = blankFunction;
+        m_messageDelegate = blankFunction;
+    }
+
+    private var m_font:String;
+
+    public function get font():String {
+        return m_font;
+    }
+
+    private var m_fontSize:int;
+
+    public function get fontSize():int {
+        return m_fontSize;
+    }
+
     private var m_filePath:String;
-    private var m_password:String;
-    private var m_message:String;
-    private var m_queryChunk:QueryChunk;
-    private var m_filePathDelegate:Function;
-    private var m_messageDelegate:Function;
 
     public function get filePath():String {
         return m_filePath;
@@ -40,10 +71,14 @@ public class AppBehind {
         m_filePathDelegate();
     }
 
+    private var m_password:String;
+
     public function set password(value:String):void {
         m_password = value;
         m_queryChunk.password = m_password;
     }
+
+    private var m_message:String;
 
     public function get message():String {
         return m_message;
@@ -54,26 +89,23 @@ public class AppBehind {
         m_messageDelegate();
     }
 
+    private var m_queryChunk:QueryChunk;
+
     public function get queryChunk():QueryChunk {
         return m_queryChunk;
     }
+
+    private var m_filePathDelegate:Function;
 
     public function set filePathDelegate(value:Function):void {
         m_filePathDelegate = value;
     }
 
+    private var m_messageDelegate:Function;
+
     public function set messageDelegate(value:Function):void {
         m_messageDelegate = value;
         m_queryChunk.messageDelegate = showQCError;
-    }
-
-    public function AppBehind() {
-        m_filePath = "";
-        m_password = "";
-        m_message = "";
-        m_queryChunk = new QueryChunk();
-        m_filePathDelegate = blankFunction;
-        m_messageDelegate = blankFunction;
     }
 
     private function blankFunction():void {

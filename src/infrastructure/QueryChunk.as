@@ -30,18 +30,20 @@ import infrastructure.list.TableListData;
 import mx.utils.ObjectUtil;
 
 public class QueryChunk {
-    private var m_filePath:String;
-    private var m_password:String;
+    public function QueryChunk() {
+        m_password = "";
+        m_a = new Accessor();
+        m_tables = new TableListData();
+        m_qList = new Vector.<String>();
+        m_count = 0;
+    }
+
     private var m_a:Accessor;
     private var m_tables:TableListData;
-    private var m_queryString:String;
     private var m_qList:Vector.<String>;
-    private var m_mutableData:MutableData;
-    private var m_queryStringDelegate:Function;
-    private var m_schemaResultDelegate:Function;
-    private var m_messageDelegate:Function;
-    private var m_mutableDataDelegate:Function;
-    private var m_showStatusDelegate:Function;
+
+    private var m_filePath:String;
+    private var m_count:int;
 
     public function set filePath(value:String):void {
         m_filePath = value;
@@ -54,9 +56,13 @@ public class QueryChunk {
         }
     }
 
+    private var m_password:String;
+
     public function set password(value:String):void {
         m_password = value;
     }
+
+    private var m_queryString:String;
 
     public function get queryString():String {
         return m_queryString;
@@ -80,39 +86,44 @@ public class QueryChunk {
         m_queryStringDelegate();
     }
 
-    public function get alreadyBegun():Boolean {
-        return m_a.alreadyBegun;
-    }
+    private var m_mutableData:MutableData;
 
     public function get mutableData():MutableData {
         return m_mutableData;
     }
 
+    private var m_queryStringDelegate:Function;
+
     public function set queryStringDelegate(arg:Function):void {
         m_queryStringDelegate = arg;
     }
+
+    private var m_schemaResultDelegate:Function;
 
     public function set schemaResultDelegate(arg:Function):void {
         m_schemaResultDelegate = arg;
     }
 
+    private var m_messageDelegate:Function;
+
     public function set messageDelegate(arg:Function):void {
         m_messageDelegate = arg;
     }
+
+    private var m_mutableDataDelegate:Function;
 
     public function set mutableDataDelegate(arg:Function):void {
         m_mutableDataDelegate = arg;
     }
 
+    private var m_showStatusDelegate:Function;
+
     public function set showStatusDelegate(arg:Function):void {
         m_showStatusDelegate = arg;
     }
 
-    public function QueryChunk() {
-        m_password = "";
-        m_a = new Accessor();
-        m_tables = new TableListData();
-        m_qList = new Vector.<String>();
+    public function get alreadyBegun():Boolean {
+        return m_a.alreadyBegun;
     }
 
     public function loadTables():void {
@@ -190,6 +201,7 @@ public class QueryChunk {
                 m_a.executeStatement();
                 if (m_a.queryIsSelect()) {
                     fill(m_a.statement.getResult());
+                    m_mutableDataDelegate("Query " + (m_count++).toString());
                 }
             }
             m_showStatusDelegate("success");
@@ -216,6 +228,7 @@ public class QueryChunk {
         q += "FROM " + tInfo.name;
         queryString = q;
         executeSingleSelectQuery();
+        m_mutableDataDelegate(tInfo.name);
     }
 
     private function open():void {
@@ -240,7 +253,6 @@ public class QueryChunk {
                 mutableData.addRow();
             }
         }
-        m_mutableDataDelegate();
     }
 
     private function describe(arg:Object):void {

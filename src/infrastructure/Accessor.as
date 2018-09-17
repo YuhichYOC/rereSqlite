@@ -28,25 +28,31 @@ import flash.filesystem.File;
 import flash.utils.ByteArray;
 
 public class Accessor {
-    private var m_datasource:String;
-    private var m_password:String;
-    private var m_schemaResult:SQLSchemaResult;
-    private var m_queryString:String;
+    public function Accessor() {
+        m_alreadyBegun = false;
+    }
+
     private var m_connection:SQLConnection;
-    private var m_statement:SQLStatement;
-    private var m_alreadyBegun:Boolean;
+
+    private var m_datasource:String;
 
     public function set datasource(value:String):void {
         m_datasource = value;
     }
 
+    private var m_password:String;
+
     public function set password(value:String):void {
         m_password = value;
     }
 
+    private var m_schemaResult:SQLSchemaResult;
+
     public function get schemaResult():SQLSchemaResult {
         return m_schemaResult;
     }
+
+    private var m_queryString:String;
 
     public function get queryString():String {
         return m_queryString;
@@ -56,16 +62,16 @@ public class Accessor {
         m_queryString = value;
     }
 
+    private var m_statement:SQLStatement;
+
     public function get statement():SQLStatement {
         return m_statement;
     }
 
+    private var m_alreadyBegun:Boolean;
+
     public function get alreadyBegun():Boolean {
         return m_alreadyBegun;
-    }
-
-    public function Accessor() {
-        m_alreadyBegun = false;
     }
 
     public function open():void {
@@ -76,14 +82,6 @@ public class Accessor {
             m_connection.addEventListener(Event.OPEN, onOpened);
             m_connection.open((new File()).resolvePath(m_datasource))
         }
-    }
-
-    private function openWithPassword():void {
-        m_connection = new SQLConnection();
-        m_connection.addEventListener(Event.OPEN, onOpened);
-        var ba:ByteArray = new ByteArray();
-        ba.writeUTFBytes(m_password);
-        m_connection.open((new File()).resolvePath(m_datasource), "create", false, 1024, ba);
     }
 
     public function close():void {
@@ -123,6 +121,14 @@ public class Accessor {
             return true;
         }
         return false;
+    }
+
+    private function openWithPassword():void {
+        m_connection = new SQLConnection();
+        m_connection.addEventListener(Event.OPEN, onOpened);
+        var ba:ByteArray = new ByteArray();
+        ba.writeUTFBytes(m_password);
+        m_connection.open((new File()).resolvePath(m_datasource), "create", false, 1024, ba);
     }
 
     private function onOpened(e:Event):void {

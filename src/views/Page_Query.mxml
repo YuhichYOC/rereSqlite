@@ -35,6 +35,16 @@
             m_ab = arg;
             m_ab.queryChunk.queryStringDelegate = fill;
             m_alreadyBegun = m_ab.queryChunk.alreadyBegun;
+            m_q.setStyle("fontFamily", m_ab.font);
+            m_e.setStyle("fontFamily", m_ab.font);
+            m_b.setStyle("fontFamily", m_ab.font);
+            m_c.setStyle("fontFamily", m_ab.font);
+            m_r.setStyle("fontFamily", m_ab.font);
+            m_q.setStyle("fontSize", m_ab.fontSize);
+            m_e.setStyle("fontSize", m_ab.fontSize);
+            m_b.setStyle("fontSize", m_ab.fontSize);
+            m_c.setStyle("fontSize", m_ab.fontSize);
+            m_r.setStyle("fontSize", m_ab.fontSize);
         }
 
         public function unload():void {
@@ -76,7 +86,6 @@
             id="m_q"
             horizontalScrollPolicy="on"
             verticalScrollPolicy="on"
-            fontFamily="MS Gothic"
             width="100%"
             height="100%"
     />
@@ -84,27 +93,23 @@
         <s:Button
                 id="m_e"
                 label="実行"
-                fontFamily="MS Gothic"
                 click="exec(event)"
         />
         <s:Button
                 id="m_b"
                 label="トランザクション開始"
-                fontFamily="MS Gothic"
                 enabled="{!m_alreadyBegun}"
                 click="begin(event)"
         />
         <s:Button
                 id="m_c"
                 label="コミット"
-                fontFamily="MS Gothic"
                 enabled="{m_alreadyBegun}"
                 click="commit(event)"
         />
         <s:Button
                 id="m_r"
                 label="ロールバック"
-                fontFamily="MS Gothic"
                 enabled="{m_alreadyBegun}"
                 click="rollback(event)"
         />

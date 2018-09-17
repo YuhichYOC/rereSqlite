@@ -34,6 +34,12 @@
             m_ab = arg;
             m_ab.queryChunk.schemaResultDelegate = fill;
             m_l.controller.doubleClickedDelegate = doubleClicked;
+            m_s.setStyle("fontFamily", m_ab.font);
+            m_r.setStyle("fontFamily", m_ab.font);
+            m_l.setStyle("fontFamily", m_ab.font);
+            m_s.setStyle("fontSize", m_ab.fontSize);
+            m_r.setStyle("fontSize", m_ab.fontSize);
+            m_l.setStyle("fontSize", m_ab.fontSize);
         }
 
         private function fill():void {

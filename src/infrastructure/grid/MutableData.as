@@ -23,6 +23,9 @@ package infrastructure.grid {
 import mx.collections.XMLListCollection;
 
 public class MutableData {
+    public function MutableData() {
+    }
+
     private var m_fieldNames:Vector.<String>;
     private var m_row:MutableRow;
     private var m_rows:Vector.<MutableRow>;
@@ -62,9 +65,6 @@ public class MutableData {
             return true;
         }
         return false;
-    }
-
-    public function MutableData() {
     }
 
     public function addField(arg:String):void {

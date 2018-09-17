@@ -32,6 +32,8 @@
         public function init(arg:AppBehind):void {
             m_ab = arg;
             m_ab.messageDelegate = fill;
+            m_m.setStyle("fontFamily", m_ab.font);
+            m_m.setStyle("fontSize", m_ab.fontSize);
         }
 
         private function fill():void {
@@ -43,7 +45,6 @@
             id="m_m"
             horizontalScrollPolicy="on"
             verticalScrollPolicy="on"
-            fontFamily="MS Gothic"
             width="100%"
             height="100%"
     />

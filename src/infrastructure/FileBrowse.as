@@ -25,18 +25,28 @@ import flash.filesystem.File;
 import flash.net.FileFilter;
 
 public class FileBrowse {
-    private var m_f:File;
-    private var m_ab:AppBehind;
-
     public function FileBrowse(arg:AppBehind) {
         m_f = new File();
         m_ab = arg;
     }
 
+    private var m_f:File;
+    private var m_ab:AppBehind;
+
     public function run():void {
         m_f.addEventListener(Event.SELECT, onSelect);
         m_f.addEventListener(Event.CANCEL, onCancel);
         m_f.browseForOpen("title", [new FileFilter("SQLite DB ファイル", "*.db"), new FileFilter("すべてのファイル", "*.*")]);
+    }
+
+    private function onCancel(e:Event):void {
+        try {
+            m_f.removeEventListener(Event.SELECT, onSelect);
+            m_f.removeEventListener(Event.CANCEL, onCancel);
+            m_ab.filePath = "";
+        } catch (ex:Error) {
+            m_ab.message = ex.message + "¥r" + ex.getStackTrace();
+        }
     }
 
     private function onSelect(e:Event):void {
@@ -47,16 +57,6 @@ public class FileBrowse {
             if (ret != null) {
                 m_ab.filePath = ret.nativePath;
             }
-        } catch (ex:Error) {
-            m_ab.message = ex.message + "¥r" + ex.getStackTrace();
-        }
-    }
-
-    private function onCancel():void {
-        try {
-            m_f.removeEventListener(Event.SELECT, onSelect);
-            m_f.removeEventListener(Event.CANCEL, onCancel);
-            m_ab.filePath = "";
         } catch (ex:Error) {
             m_ab.message = ex.message + "¥r" + ex.getStackTrace();
         }

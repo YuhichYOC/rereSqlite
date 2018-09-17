@@ -1,6 +1,6 @@
 /*
 *
-* Row.as
+* TabItem.as
 *
 * Copyright 2018 Yuichi Yoshii
 *     吉井雄一 @ 吉井産業  you.65535.kir@gmail.com
@@ -19,11 +19,14 @@
 *
 */
 
-package infrastructure.list {
-public class Row {
-    public function Row() {
-        m_name = "";
-        m_value = 0;
+package infrastructure.tab {
+import mx.core.UIComponent;
+
+public class TabItem {
+    public function TabItem(n:String, t:String, c:UIComponent) {
+        m_name = n;
+        m_tag = t;
+        m_container = c;
     }
 
     private var m_name:String;
@@ -32,18 +35,16 @@ public class Row {
         return m_name;
     }
 
-    public function set name(value:String):void {
-        m_name = value;
+    private var m_tag:String;
+
+    public function get tag():String {
+        return m_tag;
     }
 
-    private var m_value:int;
+    private var m_container:UIComponent;
 
-    public function get value():int {
-        return m_value;
-    }
-
-    public function set value(value:int):void {
-        m_value = value;
+    public function get container():UIComponent {
+        return m_container;
     }
 }
 }

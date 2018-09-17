@@ -30,14 +30,14 @@ import spark.components.DataGrid;
 import spark.components.gridClasses.GridColumn;
 
 public class MutableDataGridController {
+    public function MutableDataGridController() {
+    }
+
     private var m_g:DataGrid;
     private var m_d:MutableData;
 
     public function setInstance(arg:DataGrid):void {
         m_g = arg;
-    }
-
-    public function MutableDataGridController() {
     }
 
     public function fill(arg:MutableData):void {

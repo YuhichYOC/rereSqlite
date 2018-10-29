@@ -37,7 +37,14 @@
         }
 
         private function fill():void {
-            m_m.text = m_ab.message;
+            var m:String = "";
+            for (var i:int = 0; i < m_ab.message.length; ++i) {
+                if (0 < i) {
+                    m += m_ab.newLine;
+                }
+                m += m_ab.message[i];
+            }
+            m_m.text = m;
         }
         ]]>
     </fx:Script>

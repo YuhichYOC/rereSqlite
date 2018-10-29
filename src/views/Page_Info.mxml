@@ -43,27 +43,35 @@
         }
 
         private function fill():void {
-            m_l.controller.fill(m_ab.queryChunk.tables(""));
+            try {
+                m_l.controller.fill(m_ab.queryChunk.tables(""));
+            } catch (err:Error) {
+                m_ab.ex = err;
+            }
         }
 
         private function search(e:Event):void {
             try {
                 m_l.controller.fill(m_ab.queryChunk.tables(m_s.text));
-            } catch (ex:Error) {
-                m_ab.message = ex.message + "¥r" + ex.getStackTrace();
+            } catch (err:Error) {
+                m_ab.ex = err;
             }
         }
 
         private function reload(e:Event):void {
-            m_s.text = "";
-            m_ab.queryChunk.loadTables();
+            try {
+                m_s.text = "";
+                m_ab.queryChunk.loadTables();
+            } catch (err:Error) {
+                m_ab.ex = err;
+            }
         }
 
         private function doubleClicked(arg:int):void {
             try {
                 m_ab.queryChunk.queryWholeTable(arg);
-            } catch (ex:Error) {
-                m_ab.message = ex.message + "¥r" + ex.getStackTrace();
+            } catch (err:Error) {
+                m_ab.ex = err;
             }
         }
         ]]>

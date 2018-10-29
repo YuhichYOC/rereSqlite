@@ -28,6 +28,7 @@ import infrastructure.list.Row;
 import infrastructure.list.TableListData;
 
 import mx.utils.ObjectUtil;
+import mx.utils.StringUtil;
 
 public class QueryChunk {
     public function QueryChunk() {
@@ -42,7 +43,6 @@ public class QueryChunk {
     private var m_tables:TableListData;
     private var m_qList:Vector.<String>;
     private var m_count:int;
-
     private var m_filePath:String;
 
     public function set filePath(value:String):void {
@@ -74,12 +74,12 @@ public class QueryChunk {
         var r:RegExp = new RegExp("^.+$", "gm");
         var m:Object = r.exec(value);
         while (null != m) {
-            t += m[0];
+            t += " " + StringUtil.trim(m[0]);
             m = r.exec(value);
         }
         m_qList = new Vector.<String>();
         t.split(";").forEach(function (arg:String, idx:int, org:Array):void {
-            if ("" != arg) {
+            if ("" != StringUtil.trim(arg)) {
                 m_qList.push(arg);
             }
         });
@@ -104,12 +104,6 @@ public class QueryChunk {
         m_schemaResultDelegate = arg;
     }
 
-    private var m_messageDelegate:Function;
-
-    public function set messageDelegate(arg:Function):void {
-        m_messageDelegate = arg;
-    }
-
     private var m_mutableDataDelegate:Function;
 
     public function set mutableDataDelegate(arg:Function):void {
@@ -120,6 +114,12 @@ public class QueryChunk {
 
     public function set showStatusDelegate(arg:Function):void {
         m_showStatusDelegate = arg;
+    }
+
+    private var m_messageDelegate:Function;
+
+    public function set messageDelegate(arg:Function):void {
+        m_messageDelegate = arg;
     }
 
     public function get alreadyBegun():Boolean {
@@ -136,9 +136,12 @@ public class QueryChunk {
             }
             m_schemaResultDelegate();
             m_showStatusDelegate("success");
-        } catch (ex:Error) {
-            m_messageDelegate(ex.message + "¥r" + ex.getStackTrace());
+        } catch (err:Error) {
+            var m:Vector.<String> = new Vector.<String>();
+            m.push(err.message);
+            m.push(err.getStackTrace());
             m_showStatusDelegate("failure");
+            m_messageDelegate(m);
         }
     }
 
@@ -153,23 +156,6 @@ public class QueryChunk {
             }
         }
         return ret;
-    }
-
-    public function executeSingleSelectQuery():void {
-        m_a.datasource = m_filePath;
-        m_a.password = m_password;
-        m_a.open();
-        try {
-            m_a.queryString = m_queryString;
-            m_a.createStatement();
-            m_a.executeStatement();
-            fill(m_a.statement.getResult());
-            m_showStatusDelegate("success");
-        } catch (ex:Error) {
-            m_messageDelegate(ex.message + "¥r" + m_a.queryString);
-            m_showStatusDelegate("failure");
-        }
-        m_a.close();
     }
 
     public function begin():void {
@@ -189,25 +175,34 @@ public class QueryChunk {
         m_a.close();
     }
 
-    public function execute():void {
+    public function execute(name:String):void {
         var openNew:Boolean = !m_a.alreadyBegun;
         if (openNew) {
             open();
         }
         try {
+            m_a.mutableDataDelegate = function (arg:SQLResult):void {
+                fill(arg);
+                if ("" != name) {
+                    m_mutableDataDelegate(name);
+                } else {
+                    m_mutableDataDelegate("Query " + (m_count++).toString());
+                }
+            };
+            m_a.showStatusDelegate = m_showStatusDelegate;
+            m_a.messageDelegate = m_messageDelegate;
             for each (var qs:String in m_qList) {
                 m_a.queryString = qs;
                 m_a.createStatement();
-                m_a.executeStatement();
-                if (m_a.queryIsSelect()) {
-                    fill(m_a.statement.getResult());
-                    m_mutableDataDelegate("Query " + (m_count++).toString());
-                }
             }
+            m_a.executeStatements();
             m_showStatusDelegate("success");
-        } catch (ex:Error) {
-            m_messageDelegate(ex.message + "¥r" + m_a.queryString);
+        } catch (err:Error) {
+            var m:Vector.<String> = new Vector.<String>();
+            m.push(err.message);
+            m.push(err.getStackTrace());
             m_showStatusDelegate("failure");
+            m_messageDelegate(m);
         }
         if (openNew) {
             close();
@@ -227,8 +222,7 @@ public class QueryChunk {
         }
         q += "FROM " + tInfo.name;
         queryString = q;
-        executeSingleSelectQuery();
-        m_mutableDataDelegate(tInfo.name);
+        execute(tInfo.name);
     }
 
     private function open():void {

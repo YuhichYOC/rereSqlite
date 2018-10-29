@@ -44,6 +44,9 @@
             m_b.setStyle("fontSize", m_ab.fontSize);
             l_f.setStyle("fontSize", m_ab.fontSize);
             m_f.setStyle("fontSize", m_ab.fontSize);
+            if (0 < m_ab.preEnterPassword.length) {
+                m_p.text = m_ab.preEnterPassword;
+            }
         }
 
         protected function browse(e:Event):void {
@@ -51,14 +54,18 @@
                 m_ab.password = m_p.text;
                 m_ab.filePathDelegate = show;
                 (new FileBrowse(m_ab)).run();
-            } catch (ex:Error) {
-                m_ab.message = ex.message + "¥r" + ex.getStackTrace();
+            } catch (err:Error) {
+                m_ab.ex = err;
             }
         }
 
         private function show():void {
-            if (m_ab.filePath) {
-                m_f.text = m_ab.filePath;
+            try {
+                if (m_ab.filePath) {
+                    m_f.text = m_ab.filePath;
+                }
+            } catch (err:Error) {
+                m_ab.ex = err;
             }
         }
         ]]>

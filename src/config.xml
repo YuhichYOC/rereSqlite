@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <root>
+    <password>
+        test_password
+    </password>
     <font>
         Osaka
     </font>
     <fontSize>
         12
     </fontSize>
+    <newLine>
+        \n
+    </newLine>
 </root>

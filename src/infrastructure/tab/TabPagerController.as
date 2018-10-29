@@ -65,6 +65,9 @@ public class TabPagerController {
         if (0 == m_pages.length) {
             return;
         }
+        if ("" == arg) {
+            return;
+        }
         var idx:int = 0;
         var new_pages:Vector.<TabItem> = new Vector.<TabItem>();
         for (var i:int = 0; i < m_pages.length; ++i) {

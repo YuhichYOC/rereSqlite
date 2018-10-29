@@ -34,17 +34,25 @@ public class AppBehind extends EventDispatcher {
         s.open(File.applicationDirectory.resolvePath("config.xml"), FileMode.READ);
         try {
             var x:XML = new XML(s.readUTFBytes(s.bytesAvailable));
+            m_preEnterPassword = x.password.child("*");
             m_font = x.font.child("*");
             m_fontSize = parseInt(x.fontSize.child("*"));
+            m_newLine = x.newLine.child("*");
         } finally {
             s.close();
         }
         m_filePath = "";
         m_password = "";
-        m_message = "";
+        m_message = new Vector.<String>();
         m_queryChunk = new QueryChunk();
         m_filePathDelegate = blankFunction;
         m_messageDelegate = blankFunction;
+    }
+
+    private var m_preEnterPassword:String;
+
+    public function get preEnterPassword():String {
+        return m_preEnterPassword;
     }
 
     private var m_font:String;
@@ -57,6 +65,12 @@ public class AppBehind extends EventDispatcher {
 
     public function get fontSize():int {
         return m_fontSize;
+    }
+
+    private var m_newLine:String;
+
+    public function get newLine():String {
+        return m_newLine;
     }
 
     private var m_filePath:String;
@@ -78,14 +92,28 @@ public class AppBehind extends EventDispatcher {
         m_queryChunk.password = m_password;
     }
 
-    private var m_message:String;
+    private var m_message:Vector.<String>;
 
-    public function get message():String {
+    public function get message():Vector.<String> {
         return m_message;
     }
 
-    public function set message(value:String):void {
+    public function set message(value:Vector.<String>):void {
         m_message = value;
+        m_messageDelegate();
+    }
+
+    private var m_ex:Error;
+
+    public function get ex():Error {
+        return m_ex;
+    }
+
+    public function set ex(value:Error):void {
+        var m:Vector.<String> = new Vector.<String>();
+        m.push(value.message);
+        m.push(value.getStackTrace());
+        m_message = m;
         m_messageDelegate();
     }
 
@@ -111,7 +139,7 @@ public class AppBehind extends EventDispatcher {
     private function blankFunction():void {
     }
 
-    private function showQCError(arg:String):void {
+    private function showQCError(arg:Vector.<String>):void {
         m_message = arg;
         m_messageDelegate();
     }

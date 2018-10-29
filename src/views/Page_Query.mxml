@@ -56,29 +56,45 @@
         private function exec(e:Event):void {
             try {
                 m_ab.queryChunk.queryString = m_q.text;
-                m_ab.queryChunk.execute();
-            } catch (ex:Error) {
-                m_ab.message = ex.message + "¥r" + ex.getStackTrace();
+                m_ab.queryChunk.execute("");
+            } catch (err:Error) {
+                m_ab.ex = err;
             }
         }
 
         private function begin(e:Event):void {
-            m_ab.queryChunk.begin();
-            m_alreadyBegun = m_ab.queryChunk.alreadyBegun;
+            try {
+                m_ab.queryChunk.begin();
+                m_alreadyBegun = m_ab.queryChunk.alreadyBegun;
+            } catch (err:Error) {
+                m_ab.ex = err;
+            }
         }
 
         private function commit(e:Event):void {
-            m_ab.queryChunk.commit();
-            m_alreadyBegun = m_ab.queryChunk.alreadyBegun;
+            try {
+                m_ab.queryChunk.commit();
+                m_alreadyBegun = m_ab.queryChunk.alreadyBegun;
+            } catch (err:Error) {
+                m_ab.ex = err;
+            }
         }
 
         private function rollback(e:Event):void {
-            m_ab.queryChunk.rollback();
-            m_alreadyBegun = m_ab.queryChunk.alreadyBegun;
+            try {
+                m_ab.queryChunk.rollback();
+                m_alreadyBegun = m_ab.queryChunk.alreadyBegun;
+            } catch (err:Error) {
+                m_ab.ex = err;
+            }
         }
 
         private function fill():void {
-            m_q.text = m_ab.queryChunk.queryString;
+            try {
+                m_q.text = m_ab.queryChunk.queryString;
+            } catch (err:Error) {
+                m_ab.ex = err;
+            }
         }
         ]]>
     </fx:Script>

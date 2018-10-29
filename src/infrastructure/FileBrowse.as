@@ -44,8 +44,8 @@ public class FileBrowse {
             m_f.removeEventListener(Event.SELECT, onSelect);
             m_f.removeEventListener(Event.CANCEL, onCancel);
             m_ab.filePath = "";
-        } catch (ex:Error) {
-            m_ab.message = ex.message + "¥r" + ex.getStackTrace();
+        } catch (err:Error) {
+            m_ab.ex = err;
         }
     }
 
@@ -57,8 +57,8 @@ public class FileBrowse {
             if (ret != null) {
                 m_ab.filePath = ret.nativePath;
             }
-        } catch (ex:Error) {
-            m_ab.message = ex.message + "¥r" + ex.getStackTrace();
+        } catch (err:Error) {
+            m_ab.ex = err;
         }
     }
 }

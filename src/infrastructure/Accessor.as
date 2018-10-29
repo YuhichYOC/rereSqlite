@@ -21,9 +21,12 @@
 
 package infrastructure {
 import flash.data.SQLConnection;
+import flash.data.SQLResult;
 import flash.data.SQLSchemaResult;
 import flash.data.SQLStatement;
 import flash.events.Event;
+import flash.events.SQLErrorEvent;
+import flash.events.SQLEvent;
 import flash.filesystem.File;
 import flash.utils.ByteArray;
 
@@ -33,6 +36,7 @@ public class Accessor {
     }
 
     private var m_connection:SQLConnection;
+    private var m_statements:Vector.<SQLStatement>;
 
     private var m_datasource:String;
 
@@ -62,10 +66,22 @@ public class Accessor {
         m_queryString = value;
     }
 
-    private var m_statement:SQLStatement;
+    private var m_mutableDataDelegate:Function;
 
-    public function get statement():SQLStatement {
-        return m_statement;
+    public function set mutableDataDelegate(value:Function):void {
+        m_mutableDataDelegate = value;
+    }
+
+    private var m_showStatusDelegate:Function;
+
+    public function set showStatusDelegate(value:Function):void {
+        m_showStatusDelegate = value;
+    }
+
+    private var m_messageDelegate:Function;
+
+    public function set messageDelegate(value:Function):void {
+        m_messageDelegate = value;
     }
 
     private var m_alreadyBegun:Boolean;
@@ -75,6 +91,7 @@ public class Accessor {
     }
 
     public function open():void {
+        m_statements = new Vector.<SQLStatement>();
         if ("" != m_password) {
             openWithPassword();
         } else {
@@ -106,21 +123,19 @@ public class Accessor {
     }
 
     public function createStatement():SQLStatement {
-        m_statement = new SQLStatement();
-        m_statement.sqlConnection = m_connection;
-        return m_statement;
+        var add:SQLStatement = new SQLStatement();
+        add.sqlConnection = m_connection;
+        add.text = m_queryString;
+        add.addEventListener(SQLEvent.RESULT, onSuccess);
+        add.addEventListener(SQLErrorEvent.ERROR, onFailure);
+        m_statements.push(add);
+        return add;
     }
 
-    public function executeStatement():void {
-        m_statement.text = m_queryString;
-        m_statement.execute();
-    }
-
-    public function queryIsSelect():Boolean {
-        if ((new RegExp("^ *SELECT")).test(m_queryString)) {
-            return true;
+    public function executeStatements():void {
+        for each (var item:SQLStatement in m_statements) {
+            item.execute();
         }
-        return false;
     }
 
     private function openWithPassword():void {
@@ -135,6 +150,41 @@ public class Accessor {
         m_connection.removeEventListener(Event.OPEN, onOpened);
         m_connection.loadSchema();
         m_schemaResult = m_connection.getSchemaResult();
+    }
+
+    private function onSuccess(e:SQLEvent):void {
+        var target:SQLStatement = e.target as SQLStatement;
+        if (null != target) {
+            target.removeEventListener(SQLEvent.RESULT, onSuccess);
+            target.removeEventListener(SQLErrorEvent.ERROR, onFailure);
+            var result:SQLResult = target.getResult();
+            if (null != result && null != result.data && 0 < result.data.length) {
+                if (null != m_mutableDataDelegate) {
+                    m_mutableDataDelegate(result);
+                }
+            }
+        }
+        if (null != m_showStatusDelegate) {
+            m_showStatusDelegate("success");
+        }
+    }
+
+    private function onFailure(e:SQLErrorEvent):void {
+        var target:SQLStatement = e.target as SQLStatement;
+        var m:Vector.<String> = new Vector.<String>();
+        if (null != target) {
+            target.removeEventListener(SQLEvent.RESULT, onSuccess);
+            target.removeEventListener(SQLErrorEvent.ERROR, onFailure);
+            m.push(target.text);
+            m.push(e.error.toString());
+            m.push(e.error.details);
+        }
+        if (null != m_showStatusDelegate) {
+            m_showStatusDelegate("failure");
+        }
+        if (null != m_messageDelegate) {
+            m_messageDelegate(m);
+        }
     }
 }
 }

@@ -44,6 +44,14 @@ public class QueryChunk {
     private var m_qList:Vector.<String>;
     private var m_count:int;
     private var m_filePath:String;
+    private var m_password:String;
+    private var m_queryString:String;
+    private var m_mutableData:MutableData;
+    private var m_queryStringDelegate:Function;
+    private var m_schemaResultDelegate:Function;
+    private var m_mutableDataDelegate:Function;
+    private var m_showStatusDelegate:Function;
+    private var m_messageDelegate:Function;
 
     public function set filePath(value:String):void {
         m_filePath = value;
@@ -56,13 +64,9 @@ public class QueryChunk {
         }
     }
 
-    private var m_password:String;
-
     public function set password(value:String):void {
         m_password = value;
     }
-
-    private var m_queryString:String;
 
     public function get queryString():String {
         return m_queryString;
@@ -86,37 +90,25 @@ public class QueryChunk {
         m_queryStringDelegate();
     }
 
-    private var m_mutableData:MutableData;
-
     public function get mutableData():MutableData {
         return m_mutableData;
     }
-
-    private var m_queryStringDelegate:Function;
 
     public function set queryStringDelegate(arg:Function):void {
         m_queryStringDelegate = arg;
     }
 
-    private var m_schemaResultDelegate:Function;
-
     public function set schemaResultDelegate(arg:Function):void {
         m_schemaResultDelegate = arg;
     }
-
-    private var m_mutableDataDelegate:Function;
 
     public function set mutableDataDelegate(arg:Function):void {
         m_mutableDataDelegate = arg;
     }
 
-    private var m_showStatusDelegate:Function;
-
     public function set showStatusDelegate(arg:Function):void {
         m_showStatusDelegate = arg;
     }
-
-    private var m_messageDelegate:Function;
 
     public function set messageDelegate(arg:Function):void {
         m_messageDelegate = arg;

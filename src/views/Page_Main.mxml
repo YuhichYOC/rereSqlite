@@ -57,6 +57,14 @@
             m_ab.queryChunk.showStatusDelegate = m_showStatusDelegate;
         }
 
+        public function get windowWidth():int {
+            return m_ab.windowWidth;
+        }
+
+        public function get windowHeight():int {
+            return m_ab.windowHeight;
+        }
+
         public function tellExit():void {
             m_q.unload();
         }

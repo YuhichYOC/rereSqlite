@@ -27,6 +27,7 @@ public class Row {
     }
 
     private var m_name:String;
+    private var m_value:int;
 
     public function get name():String {
         return m_name;
@@ -35,8 +36,6 @@ public class Row {
     public function set name(value:String):void {
         m_name = value;
     }
-
-    private var m_value:int;
 
     public function get value():int {
         return m_value;

@@ -39,24 +39,25 @@ public class Accessor {
     private var m_statements:Vector.<SQLStatement>;
 
     private var m_datasource:String;
+    private var m_password:String;
+    private var m_schemaResult:SQLSchemaResult;
+    private var m_queryString:String;
+    private var m_mutableDataDelegate:Function;
+    private var m_showStatusDelegate:Function;
+    private var m_messageDelegate:Function;
+    private var m_alreadyBegun:Boolean;
 
     public function set datasource(value:String):void {
         m_datasource = value;
     }
 
-    private var m_password:String;
-
     public function set password(value:String):void {
         m_password = value;
     }
 
-    private var m_schemaResult:SQLSchemaResult;
-
     public function get schemaResult():SQLSchemaResult {
         return m_schemaResult;
     }
-
-    private var m_queryString:String;
 
     public function get queryString():String {
         return m_queryString;
@@ -66,25 +67,17 @@ public class Accessor {
         m_queryString = value;
     }
 
-    private var m_mutableDataDelegate:Function;
-
     public function set mutableDataDelegate(value:Function):void {
         m_mutableDataDelegate = value;
     }
-
-    private var m_showStatusDelegate:Function;
 
     public function set showStatusDelegate(value:Function):void {
         m_showStatusDelegate = value;
     }
 
-    private var m_messageDelegate:Function;
-
     public function set messageDelegate(value:Function):void {
         m_messageDelegate = value;
     }
-
-    private var m_alreadyBegun:Boolean;
 
     public function get alreadyBegun():Boolean {
         return m_alreadyBegun;

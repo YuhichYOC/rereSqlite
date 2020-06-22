@@ -34,11 +34,20 @@
         import spark.formatters.DateTimeFormatter;
 
         private function complete(e:Event):void {
+            resize(m_m.windowWidth, m_m.windowHeight);
             m_m.showStatusDelegate = showStatus;
         }
 
         private function tellExit(e:Event):void {
             m_m.tellExit();
+        }
+
+        private function resize(w:int, h:int):void {
+            if (100 >= w || 100 >= h) {
+                return;
+            }
+            this.width = w;
+            this.height = h;
         }
 
         private function showStatus(arg:String):void {

@@ -30,18 +30,16 @@ public class TabItem {
     }
 
     private var m_name:String;
+    private var m_tag:String;
+    private var m_container:UIComponent;
 
     public function get name():String {
         return m_name;
     }
 
-    private var m_tag:String;
-
     public function get tag():String {
         return m_tag;
     }
-
-    private var m_container:UIComponent;
 
     public function get container():UIComponent {
         return m_container;

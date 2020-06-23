@@ -27,6 +27,8 @@
 >
     <fx:Script>
         <![CDATA[
+        import spark.formatters.DateTimeFormatter;
+
         private var m_ab:AppBehind;
 
         public function init(arg:AppBehind):void {
@@ -40,11 +42,13 @@
             var m:String = "";
             for (var i:int = 0; i < m_ab.message.length; ++i) {
                 if (0 < i) {
-                    m += m_ab.newLine;
+                    m += "\n";
                 }
                 m += m_ab.message[i];
             }
-            m_m.text = m;
+            var f:DateTimeFormatter = new DateTimeFormatter();
+            f.dateTimePattern = "yyyy-MM-dd HH:mm:ss";
+            m_m.text = (f.format(new Date())) + "\n" + m + "\n" + m_m.text;
         }
         ]]>
     </fx:Script>

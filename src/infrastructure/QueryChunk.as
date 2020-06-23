@@ -22,6 +22,7 @@
 package infrastructure {
 import flash.data.SQLResult;
 import flash.data.SQLTableSchema;
+import flash.errors.SQLError;
 
 import infrastructure.grid.MutableData;
 import infrastructure.list.Row;
@@ -133,11 +134,7 @@ public class QueryChunk {
             m_schemaResultDelegate();
             m_showStatusDelegate("success");
         } catch (err:Error) {
-            var m:Vector.<String> = new Vector.<String>();
-            m.push(err.message);
-            m.push(err.getStackTrace());
-            m_showStatusDelegate("failure");
-            m_messageDelegate(m);
+            handleAnyError(err);
         }
     }
 
@@ -193,12 +190,10 @@ public class QueryChunk {
             }
             m_a.executeStatements();
             m_showStatusDelegate("success");
+        } catch (sqlerr:SQLError) {
+            handleSQLError(sqlerr);
         } catch (err:Error) {
-            var m:Vector.<String> = new Vector.<String>();
-            m.push(err.message);
-            m.push(err.getStackTrace());
-            m_showStatusDelegate("failure");
-            m_messageDelegate(m);
+            handleAnyError(err);
         }
         if (openNew) {
             close();
@@ -250,6 +245,24 @@ public class QueryChunk {
         for (var i:int = 0; i < info.properties.length; ++i) {
             m_mutableData.addField(info.properties[i].localName);
         }
+    }
+
+    private function handleSQLError(err:SQLError):void {
+        var m:Vector.<String> = new Vector.<String>();
+        m.push(err.errorID.toString());
+        m.push(err.operation);
+        m.push(err.message);
+        m.push(err.getStackTrace());
+        m_showStatusDelegate("failure");
+        m_messageDelegate(m);
+    }
+
+    private function handleAnyError(err:Error):void {
+        var m:Vector.<String> = new Vector.<String>();
+        m.push(err.message);
+        m.push(err.getStackTrace());
+        m_showStatusDelegate("failure");
+        m_messageDelegate(m);
     }
 }
 }

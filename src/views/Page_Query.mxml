@@ -56,7 +56,7 @@
         private function exec(e:Event):void {
             try {
                 m_ab.queryChunk.queryString = m_q.text;
-                m_ab.queryChunk.execute("");
+                m_ab.queryChunk.execute();
             } catch (err:Error) {
                 m_ab.ex = err;
             }

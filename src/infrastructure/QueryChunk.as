@@ -168,7 +168,7 @@ public class QueryChunk {
         m_a.close();
     }
 
-    public function execute(name:String):void {
+    public function execute():void {
         var openNew:Boolean = !m_a.alreadyBegun;
         if (openNew) {
             open();
@@ -176,11 +176,7 @@ public class QueryChunk {
         try {
             m_a.mutableDataDelegate = function (arg:SQLResult):void {
                 fill(arg);
-                if ("" != name) {
-                    m_mutableDataDelegate(name);
-                } else {
-                    m_mutableDataDelegate("Query " + (m_count++).toString());
-                }
+                m_mutableDataDelegate("Query " + (m_count++).toString());
             };
             m_a.showStatusDelegate = m_showStatusDelegate;
             m_a.messageDelegate = m_messageDelegate;
@@ -213,7 +209,7 @@ public class QueryChunk {
         }
         q += "FROM \n    " + tInfo.name + " \n";
         queryString = q;
-        execute(tInfo.name);
+        executeQueryWholeTable(i);
     }
 
     private function open():void {
@@ -230,13 +226,7 @@ public class QueryChunk {
         m_mutableData = new MutableData();
         if (arg && arg.data && 0 < arg.data.length && arg.data[0]) {
             describe(arg.data[0]);
-            for (var r:int = 0; r < arg.data.length; ++r) {
-                for each (var f:String in mutableData.fields()) {
-                    var v:String = arg.data[r][f];
-                    mutableData.addValue(v);
-                }
-                mutableData.addRow();
-            }
+            pushResult(arg);
         }
     }
 
@@ -244,6 +234,51 @@ public class QueryChunk {
         var info:Object = ObjectUtil.getClassInfo(arg);
         for (var i:int = 0; i < info.properties.length; ++i) {
             m_mutableData.addField(info.properties[i].localName);
+        }
+    }
+
+    private function pushResult(arg:SQLResult):void {
+        for (var r:int = 0; arg.data.length > r; ++r) {
+            for each (var f:String in mutableData.fields()) {
+                var v:String = arg.data[r][f];
+                mutableData.addValue(v);
+            }
+            mutableData.addRow();
+        }
+    }
+
+    private function executeQueryWholeTable(i:int):void {
+        open();
+        try {
+            m_a.mutableDataDelegate = function (arg:SQLResult):void {
+                fillWholeTable(arg, m_a.schemaResult.tables[i]);
+                m_mutableDataDelegate(m_a.schemaResult.tables[i].name);
+            };
+            m_a.showStatusDelegate = m_showStatusDelegate;
+            m_a.messageDelegate = m_messageDelegate;
+            m_a.queryString = queryString;
+            m_a.createStatement();
+            m_a.executeStatements();
+            m_showStatusDelegate("success");
+        } catch (sqlerr:SQLError) {
+            handleSQLError(sqlerr);
+        } catch (err:Error) {
+            handleAnyError(err);
+        }
+        close();
+    }
+
+    private function fillWholeTable(arg:SQLResult, tInfo:SQLTableSchema):void {
+        m_mutableData = new MutableData();
+        if (arg && arg.data && 0 < arg.data.length && arg.data[0]) {
+            describeTableSchema(tInfo);
+            pushResult(arg);
+        }
+    }
+
+    private function describeTableSchema(tInfo:SQLTableSchema):void {
+        for (var i:int = 0; tInfo.columns.length > i; ++i) {
+            m_mutableData.addField(tInfo.columns[i].name);
         }
     }
 

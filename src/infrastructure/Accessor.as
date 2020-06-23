@@ -160,10 +160,8 @@ public class Accessor {
             target.removeEventListener(SQLEvent.RESULT, onSuccess);
             target.removeEventListener(SQLErrorEvent.ERROR, onFailure);
             var result:SQLResult = target.getResult();
-            if (null != result && null != result.data && 0 < result.data.length) {
-                if (null != m_mutableDataDelegate) {
-                    m_mutableDataDelegate(result);
-                }
+            if (null != m_mutableDataDelegate) {
+                m_mutableDataDelegate(result);
             }
         }
         if (null != m_showStatusDelegate) {

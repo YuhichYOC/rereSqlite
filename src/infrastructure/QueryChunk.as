@@ -176,7 +176,6 @@ public class QueryChunk {
         try {
             m_a.mutableDataDelegate = function (arg:SQLResult):void {
                 fill(arg);
-                m_mutableDataDelegate("Query " + (m_count++).toString());
             };
             m_a.showStatusDelegate = m_showStatusDelegate;
             m_a.messageDelegate = m_messageDelegate;
@@ -223,10 +222,16 @@ public class QueryChunk {
     }
 
     private function fill(arg:SQLResult):void {
-        m_mutableData = new MutableData();
         if (arg && arg.data && 0 < arg.data.length && arg.data[0]) {
+            ++m_count;
+            m_mutableData = new MutableData();
             describe(arg.data[0]);
             pushResult(arg);
+            m_mutableDataDelegate("Query " + (m_count).toString());
+        } else {
+            var m:Vector.<String> = new Vector.<String>();
+            m.push("Query " + m_count.toString() + " has no records.");
+            m_messageDelegate(m);
         }
     }
 
@@ -252,7 +257,6 @@ public class QueryChunk {
         try {
             m_a.mutableDataDelegate = function (arg:SQLResult):void {
                 fillWholeTable(arg, m_a.schemaResult.tables[i]);
-                m_mutableDataDelegate(m_a.schemaResult.tables[i].name);
             };
             m_a.showStatusDelegate = m_showStatusDelegate;
             m_a.messageDelegate = m_messageDelegate;
@@ -269,10 +273,15 @@ public class QueryChunk {
     }
 
     private function fillWholeTable(arg:SQLResult, tInfo:SQLTableSchema):void {
-        m_mutableData = new MutableData();
         if (arg && arg.data && 0 < arg.data.length && arg.data[0]) {
+            m_mutableData = new MutableData();
             describeTableSchema(tInfo);
             pushResult(arg);
+            m_mutableDataDelegate(tInfo.name);
+        } else {
+            var m:Vector.<String> = new Vector.<String>();
+            m.push(tInfo.name + " has no records.");
+            m_messageDelegate(m);
         }
     }
 

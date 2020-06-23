@@ -20,6 +20,9 @@
 */
 
 package infrastructure.list {
+import flash.desktop.Clipboard;
+import flash.desktop.ClipboardFormats;
+
 import spark.components.List;
 
 public class TableListController {
@@ -54,6 +57,13 @@ public class TableListController {
                     m_doubleClickedDelegate(i);
                 }
             }
+        }
+    }
+
+    public function performClip():void {
+        if (!m_d.isEmpty) {
+            Clipboard.generalClipboard.clear();
+            Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, m_d.toString());
         }
     }
 

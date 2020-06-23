@@ -32,6 +32,10 @@ public class TableListData {
         return m_rows;
     }
 
+    public function get isEmpty():Boolean {
+        return (0 === m_rows.length);
+    }
+
     public function get rowsToXML():XMLListCollection {
         var x:XML = new XML(rootNode());
         for (var i:int = 0; i < m_rows.length; ++i) {
@@ -68,6 +72,17 @@ public class TableListData {
             }
         }
         return -1;
+    }
+
+    public function toString():String {
+        var ret:String = "";
+        for (var i:int = 0; m_rows.length > i; ++i) {
+            ret += m_rows[i].name;
+            if (m_rows.length > i + 1) {
+                ret += "\r";
+            }
+        }
+        return ret;
     }
 
     private function rootNode():XML {

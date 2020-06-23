@@ -40,6 +40,12 @@
         private function doubleClicked(e:Event):void {
             m_c.performDoubleClick();
         }
+
+        private function clip(e:KeyboardEvent):void {
+            if (e.ctrlKey && (e.keyCode == Keyboard.C)) {
+                m_c.performClip();
+            }
+        }
         ]]>
     </fx:Script>
     <s:List
@@ -50,5 +56,6 @@
             verticalScrollPolicy="on"
             doubleClickEnabled="true"
             doubleClick="doubleClicked(event)"
+            keyDown="clip(event)"
     />
 </s:Group>

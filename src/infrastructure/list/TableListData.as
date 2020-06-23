@@ -52,6 +52,15 @@ public class TableListData {
         m_rows.push(add);
     }
 
+    public function sortByName():void {
+        m_rows.sort(function (left:Row, right:Row):Number {
+            if (left.name === right.name) {
+                return 0;
+            }
+            return left.name < right.name ? -1 : 1;
+        });
+    }
+
     public function nameToIndex(arg:String):int {
         for each (var r:Row in m_rows) {
             if (arg == r.name) {

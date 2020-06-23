@@ -129,6 +129,7 @@ public class QueryChunk {
             for (var i:int = 0; i < m_a.schemaResult.tables.length; ++i) {
                 m_tables.addRow(m_a.schemaResult.tables[i].name, i);
             }
+            m_tables.sortByName();
             m_schemaResultDelegate();
             m_showStatusDelegate("success");
         } catch (err:Error) {

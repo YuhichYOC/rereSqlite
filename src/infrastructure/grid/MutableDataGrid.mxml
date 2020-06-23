@@ -59,6 +59,7 @@
             height="100%"
             horizontalScrollPolicy="on"
             verticalScrollPolicy="on"
+            selectionMode="singleCell"
             keyDown="clip(event)"
     />
 </s:Group>

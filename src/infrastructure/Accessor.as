@@ -24,6 +24,7 @@ import flash.data.SQLConnection;
 import flash.data.SQLResult;
 import flash.data.SQLSchemaResult;
 import flash.data.SQLStatement;
+import flash.errors.SQLError;
 import flash.events.Event;
 import flash.events.SQLErrorEvent;
 import flash.events.SQLEvent;
@@ -141,8 +142,16 @@ public class Accessor {
 
     private function onOpened(e:Event):void {
         m_connection.removeEventListener(Event.OPEN, onOpened);
-        m_connection.loadSchema();
-        m_schemaResult = m_connection.getSchemaResult();
+        try {
+            m_connection.loadSchema();
+            m_schemaResult = m_connection.getSchemaResult();
+        } catch (err:SQLError) {
+            var m:Vector.<String> = new Vector.<String>();
+            if (null != m_messageDelegate) {
+                m.push("Database : " + m_datasource + " is empty.");
+                m_messageDelegate(m);
+            }
+        }
     }
 
     private function onSuccess(e:SQLEvent):void {

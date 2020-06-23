@@ -123,6 +123,9 @@ public class QueryChunk {
             m_tables = new TableListData();
             m_a.open();
             m_a.close();
+            if (null == m_a.schemaResult) {
+                return;
+            }
             for (var i:int = 0; i < m_a.schemaResult.tables.length; ++i) {
                 m_tables.addRow(m_a.schemaResult.tables[i].name, i);
             }

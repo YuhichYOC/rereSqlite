@@ -39,6 +39,12 @@ public class FileBrowse {
         m_f.browseForOpen("title", [new FileFilter("SQLite DB ファイル", "*.db"), new FileFilter("すべてのファイル", "*.*")]);
     }
 
+    public function runForCreate():void {
+        m_f.addEventListener(Event.SELECT, onSelect);
+        m_f.addEventListener(Event.CANCEL, onCancel);
+        m_f.browseForSave("title");
+    }
+
     private function onCancel(e:Event):void {
         try {
             m_f.removeEventListener(Event.SELECT, onSelect);

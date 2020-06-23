@@ -59,6 +59,16 @@
             }
         }
 
+        protected function browseForCreate(e:Event):void {
+            try {
+                m_ab.password = m_pfc.text;
+                m_ab.filePathDelegate = show;
+                (new FileBrowse(m_ab)).runForCreate();
+            } catch (err:Error) {
+                m_ab.ex = err;
+            }
+        }
+
         private function show():void {
             try {
                 if (m_ab.filePath) {
@@ -70,20 +80,50 @@
         }
         ]]>
     </fx:Script>
-    <s:Label
-            id="l_p"
-            text="パスワード"
-    />
-    <s:TextInput
-            id="m_p"
-            width="200"
-    />
-    <s:Button
-            id="m_b"
-            width="200"
-            label="ファイル選択"
-            click="browse(event)"
-    />
+    <s:HGroup
+            width="100%"
+    >
+        <s:VGroup
+                id="g_l"
+                width="50%"
+        >
+            <s:Label
+                    id="l_p"
+                    text="パスワード"
+            />
+            <s:TextInput
+                    id="m_p"
+                    width="200"
+            />
+            <s:Button
+                    id="m_b"
+                    width="200"
+                    label="ファイル選択"
+                    click="browse(event)"
+            />
+            <s:Label id="l_gl"/>
+        </s:VGroup>
+        <s:VGroup
+                id="g_r"
+                width="50%"
+        >
+            <s:Label
+                    id="l_pfc"
+                    text="パスワード ( 半角 16 文字 )"
+            />
+            <s:TextInput
+                    id="m_pfc"
+                    width="200"
+            />
+            <s:Button
+                    id="m_bfc"
+                    width="200"
+                    label="新規作成"
+                    click="browseForCreate(event)"
+            />
+            <s:Label id="l_gr"/>
+        </s:VGroup>
+    </s:HGroup>
     <s:Label
             id="l_f"
             text="選択中のファイル"

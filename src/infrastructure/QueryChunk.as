@@ -202,16 +202,16 @@ public class QueryChunk {
 
     public function queryWholeTable(i:int):void {
         var tInfo:SQLTableSchema = m_a.schemaResult.tables[i];
-        var q:String = "SELECT ";
+        var q:String = "SELECT \n";
         for (var j:int = 0; j < tInfo.columns.length; ++j) {
-            q += tInfo.columns[j].name;
-            if (tInfo.columns.length > j + 1) {
-                q += ", ";
+            if (0 < j) {
+                q += "  , ";
             } else {
-                q += " ";
+                q += "    ";
             }
+            q += tInfo.columns[j].name + " \n";
         }
-        q += "FROM " + tInfo.name;
+        q += "FROM \n    " + tInfo.name + " \n";
         queryString = q;
         execute(tInfo.name);
     }
